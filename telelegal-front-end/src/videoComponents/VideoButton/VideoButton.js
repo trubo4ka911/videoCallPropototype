@@ -4,7 +4,7 @@ import startLocalVideoStream from "./startLocalVideoStream";
 import updateCallStatus from "../../redux/actions/updateCallStatus";
 import getDevices from "../../webRTCutilities/getDevices";
 import addStream from "../../redux/actions/addStream";
-
+import ActionButtonCaretDropDown from "../ActionButtonCaretDropDown";
 const VideoButton = ({ smallFeedEl }) => {
   const dispatch = useDispatch();
   const callStatus = useSelector((state) => state.callStatus);
@@ -40,22 +40,7 @@ const VideoButton = ({ smallFeedEl }) => {
     //if we stop the old tracks and add the new tracks, that will mean ... renegotiation
   };
 
-  const DropDown = () => {
-    return (
-      <div className="caret-dropdown" style={{ top: "-25px" }}>
-        <select
-          defaultValue={callStatus.videoDevice}
-          onChange={changeVideoDevice}
-        >
-          {videoDeviceList.map((vd) => (
-            <option key={vd.deviceId} value={vd.deviceId}>
-              {vd.label}
-            </option>
-          ))}
-        </select>
-      </div>
-    );
-  };
+  const DropDown = () => {};
   useEffect(() => {
     const getDevicesAsync = async () => {
       if (caretOpen) {
@@ -107,7 +92,15 @@ const VideoButton = ({ smallFeedEl }) => {
           {callStatus.video === "enabled" ? "Stop" : "Start"} Video
         </div>
       </div>
-      {caretOpen ? <DropDown /> : <></>}
+      {caretOpen ? (
+        <ActionButtonCaretDropDown
+          defaultValue={callStatus.videoDevice}
+          changeHandler={changeVideoDevice}
+          deviceList={videoDeviceList}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

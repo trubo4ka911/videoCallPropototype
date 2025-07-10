@@ -4,17 +4,19 @@ import ActionButtonCaretDropDown from "../ActionButtonCaretDropDown";
 import getDevices from "../../webRTCutilities/getDevices";
 import updateCallStatus from "../../redux/actions/updateCallStatus";
 import addStream from "../../redux/actions/addStream";
+import startLocalAudioStream from "./startLocalAudioStream";
 
 const AudioButton = ({ smallFeedEl }) => {
   const dispatch = useDispatch();
   const callStatus = useSelector((state) => state.callStatus);
+  const streams = useSelector((state) => state.streams);
   const [caretOpen, setCaretOpen] = useState(false);
   const [audioDeviceList, setAudioDeviceList] = useState([]);
 
   let micText;
-  if (callStatus.current === "idle") {
+  if (callStatus.audio === "off") {
     micText = "Join Audio";
-  } else if (callStatus.audio) {
+  } else if (callStatus.audio === "enabled") {
     micText = "Mute";
   } else {
     micText = "Unmute";
@@ -33,6 +35,23 @@ const AudioButton = ({ smallFeedEl }) => {
     };
     getDevicesAsync();
   }, [caretOpen]);
+  const startStopAudio = () => {
+    if (callStatus.audio === "enabled") {
+      dispatch(updateCallStatus("audio", "disabled"));
+      //set the stream to disabled
+      const tracks = streams.localStream.stream.getAudioTracks();
+      tracks.forEach((t) => (t.enabled = false));
+    } else if (callStatus.audio === "disabled") {
+      dispatch(updateCallStatus("audio", "enabled"));
+      const tracks = streams.localStream.stream.getAudioTracks();
+      tracks.forEach((t) => (t.enabled = true));
+    } else {
+      //audio is "off"
+      changeAudioDevice({ target: { value: "inputdefault" } });
+      //add tracks
+      startLocalAudioStream(streams);
+    }
+  };
 
   const changeAudioDevice = async (e) => {
     //the user changed the desired output audio device OR input audio device
@@ -69,7 +88,7 @@ const AudioButton = ({ smallFeedEl }) => {
         className="fa fa-caret-up choose-audio"
         onClick={() => setCaretOpen(!caretOpen)}
       ></i>
-      <div className="button mic">
+      <div className="button mic" onClick={startStopAudio}>
         <i className="fa fa-microphone"></i>
         <div className="btn-text">{micText}</div>
       </div>

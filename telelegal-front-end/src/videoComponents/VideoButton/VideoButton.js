@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import startLocalVideoStream from "./startLocalVideoStream";
 import updateCallStatus from "../../redux/actions/updateCallStatus";
 import getDevices from "../../webRTCutilities/getDevices";
+import addStream from "../../redux/actions/addStream";
 
 const VideoButton = ({ smallFeedEl }) => {
   const dispatch = useDispatch();
@@ -12,12 +13,40 @@ const VideoButton = ({ smallFeedEl }) => {
   const [caretOpen, setCaretOpen] = useState(false);
   const [videoDeviceList, setVideoDeviceList] = useState([]);
 
-  const changeVideoDevice = () => {};
+  const changeVideoDevice = async (e) => {
+    //the user changed the desired video device
+    //1. need to get that device
+    const deviceId = e.target.value;
+    // console.log(deviceId);
+    //2. need  to getUserMedia (permission)
+    const newConstraint = {
+      audio:
+        callStatus.audioDevice === "default"
+          ? true
+          : { deviceId: { exact: deviceId } },
+      video: { deviceId: { exact: deviceId } },
+    };
+    const stream = await navigator.mediaDevices.getUserMedia(newConstraint);
+    //3. update Redux with that videoDevice, and that video is enabled
+    dispatch(updateCallStatus("videoDevice", deviceId));
+    dispatch(updateCallStatus("video", "enabled"));
+    //4. update the smallFeedEl
+    smallFeedEl.current.srcObject = stream;
+    //5. need to updat the localStream in streams
+    dispatch(addStream("localStream", stream));
+    //6. add tracks
+    const tracks = stream.getVideoTracks();
+    //come back later
+    //if we stop the old tracks and add the new tracks, that will mean ... renegotiation
+  };
 
   const DropDown = () => {
     return (
       <div className="caret-dropdown" style={{ top: "-25px" }}>
-        <select defaultValue={1} onChange={changeVideoDevice}>
+        <select
+          defaultValue={callStatus.videoDevice}
+          onChange={changeVideoDevice}
+        >
           {videoDeviceList.map((vd) => (
             <option key={vd.deviceId} value={vd.deviceId}>
               {vd.label}

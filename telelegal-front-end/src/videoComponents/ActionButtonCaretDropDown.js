@@ -4,39 +4,41 @@ const ActionButtonCaretDropDown = ({
   deviceList,
   type,
 }) => {
-  let dropDownEl;
-  if (type === "video") {
-    dropDownEl = deviceList.map((vd) => (
-      <option key={vd.deviceId} value={vd.deviceId}>
-        {vd.label}
+  const renderOptions = (devices) =>
+    devices.map((device) => (
+      <option key={device.deviceId} value={device.deviceId}>
+        {device.label || "Unknown"}
       </option>
     ));
+
+  let dropDownContent = null;
+
+  if (type === "video") {
+    dropDownContent = renderOptions(deviceList);
   } else if (type === "audio") {
-    const audioInputEl = [];
-    const audioOutputEl = [];
-    deviceList.forEach((d, i) => {
-      if (d.kind === "audioinput") {
-        audioInputEl.push(
-          <option key={d.deviceId} value={d.deviceId}>
-            {d.label}
-          </option>
-        );
-      } else if (d.kind === "audiooutput") {
-        audioOutputEl.push(
-          <option key={d.deviceId} value={d.deviceId}>
-            {d.label}
-          </option>
-        );
-      }
-    });
-    audioInputEl.unshift(<optgroup label="Input Devices" />);
-    audioOutputEl.unshift(<optgroup label="Output Devices" />);
-    dropDownEl = audioInputEl.concat(audioOutputEl);
+    const inputDevices = deviceList.filter((d) => d.kind === "audioinput");
+    const outputDevices = deviceList.filter((d) => d.kind === "audiooutput");
+
+    dropDownContent = (
+      <>
+        {inputDevices.length > 0 && (
+          <optgroup label="Input Devices">
+            {renderOptions(inputDevices)}
+          </optgroup>
+        )}
+        {outputDevices.length > 0 && (
+          <optgroup label="Output Devices">
+            {renderOptions(outputDevices)}
+          </optgroup>
+        )}
+      </>
+    );
   }
+
   return (
     <div className="caret-dropdown" style={{ top: "-25px" }}>
       <select defaultValue={defaultValue} onChange={changeHandler}>
-        {dropDownEl}
+        {dropDownContent}
       </select>
     </div>
   );

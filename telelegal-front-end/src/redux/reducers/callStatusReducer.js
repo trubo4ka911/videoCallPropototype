@@ -1,8 +1,8 @@
 const initState = {
   current: "idle", //negotiating, progress, complete
   video: "off", //video feed status: 'off' 'enabled' 'disabled' 'complete'
-  audio: "off",
-  audioDevice: "default",
+  audio: "off", //video feed status: 'off' 'enabled' 'disabled' 'complete'
+  audioDevice: "default", // enumerate devices, chosen audio device (don't care about output device)
   videoDevice: "default",
   shareScreen: false,
   haveMedia: false, //is there a localStream, has getUserMedia been run

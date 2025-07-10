@@ -97,6 +97,7 @@ const VideoButton = ({ smallFeedEl }) => {
           defaultValue={callStatus.videoDevice}
           changeHandler={changeVideoDevice}
           deviceList={videoDeviceList}
+          type="video"
         />
       ) : (
         <></>

@@ -8,6 +8,7 @@ const getDevices = () => {
     const videoDevices = devices.filter((d) => d.kind === "videoinput");
     const audioOutputDevices = devices.filter((d) => d.kind === "audiooutput");
     const audioInputDevices = devices.filter((d) => d.kind === "audioinput");
+    console.log("audioInputDevices ", audioInputDevices);
     resolve({
       videoDevices,
       audioOutputDevices,

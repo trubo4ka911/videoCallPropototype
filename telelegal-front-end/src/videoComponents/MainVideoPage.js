@@ -24,7 +24,7 @@ const MainVideoPage = () => {
     const fetchMedia = async () => {
       const constrains = {
         video: true,
-        audio: false,
+        audio: true,
       };
       try {
         const stream = await navigator.mediaDevices.getUserMedia(constrains);

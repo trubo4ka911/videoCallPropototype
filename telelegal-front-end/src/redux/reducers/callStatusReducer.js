@@ -6,6 +6,7 @@ const initState = {
   videoDevice: "default",
   shareScreen: false,
   haveMedia: false, //is there a localStream, has getUserMedia been run
+  haveCreatedOffer: false,
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -13,7 +14,6 @@ export default (state = initState, action) => {
   if (action.type === "UPDATE_CALL_STATUS") {
     const copyState = { ...state };
     copyState[action.payload.prop] = action.payload.value;
-    console.log(copyState.video);
     return copyState;
   } else if (action.type === "LOGOUT_ACTION" || action.type === "NEW_VERSION") {
     return initState;

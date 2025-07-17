@@ -19,7 +19,7 @@ Certificate: cert.crt
 -- Markup for dashboard:
 
 1. Import markup for dashboard
-2. Create path to dashboard
+2. Create path to dashboard - _https://localhost:3000/dashboard_ for back-end - https://localhost:9001/pro-link
 3. Create JWT for attorney auth and validate handshake
 4. Reorganize appt data
 5. Pull back and display appointment data on connect

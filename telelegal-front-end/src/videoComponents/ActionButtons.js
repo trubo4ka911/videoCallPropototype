@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 // import { useDispatch, useSelector } from 'react-redux';
-import HangupButton from "./HangUpButtons";
+import HangupButton from "./HangupButton";
 import socket from "../webRTCutilities/socketConnection";
 import { useSelector } from "react-redux";
 import VideoButton from "./VideoButton/VideoButton";
 import AudioButton from "./AudioButton/AudioButton";
 
-const ActionButtons = ({ openCloseChat, smallFeedEl }) => {
+const ActionButtons = ({ openCloseChat, smallFeedEl, largeFeedEl }) => {
   const callStatus = useSelector((state) => state.callStatus);
   // const callStatus = useSelector(state=>state.callStatus);
   const menuButtons = useRef(null);
@@ -75,7 +75,7 @@ const ActionButtons = ({ openCloseChat, smallFeedEl }) => {
       </div>
 
       <div className="center justify-center text-end col-2">
-        <HangupButton />
+        <HangupButton smallFeedEl={smallFeedEl} largeFeedEl={largeFeedEl} />
       </div>
     </div>
   );

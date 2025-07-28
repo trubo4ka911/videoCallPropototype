@@ -1,14 +1,14 @@
-//this function for update all peerConnections (addTracks) and update redux callStatus
-
+//this functions job is to update all peerConnections (addTracks) and update redux callStatus
 import updateCallStatus from "../../redux/actions/updateCallStatus";
 
-const startLocalAudioStream = (streams) => {
+const startAudioStream = (streams) => {
   const localStream = streams.localStream;
   for (const s in streams) {
+    //s is the key
     if (s !== "localStream") {
       //we don't addTracks to the localStream
       const curStream = streams[s];
-      //addTracks to all peerConnections
+      //addTracks to all peerConnecions
       localStream.stream.getAudioTracks().forEach((t) => {
         curStream.peerConnection.addTrack(t, streams.localStream.stream);
       });
@@ -16,4 +16,4 @@ const startLocalAudioStream = (streams) => {
   }
 };
 
-export default startLocalAudioStream;
+export default startAudioStream;

@@ -31,8 +31,10 @@ li {
 
 .clients-board {
   border-radius: 10px;
-  height: 200px;
-  overflow: scroll;
+  height: auto;
+  width: 500px;
+  margin: 30% auto;
+  /* overflow: scroll; */
 }
 
 .purple-bg {
